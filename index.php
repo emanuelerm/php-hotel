@@ -67,7 +67,6 @@
     
     if (empty($filteredHotels)) {
         $result = 'Nessun risultato corrispondente alla ricerca';
-        echo $result;
     } else {
         $result = $filteredHotels;
     }
@@ -101,33 +100,43 @@
     </header>
     <main>
         <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <form action="<?php echo $_SERVER['PHP_SELF'] ?>">
+            <div class="template" <?php if($filteredHotels == true): ?>>
+                <div class="row">
+                    <div class="col-12">
+                        <form action="<?php echo $_SERVER['PHP_SELF'] ?>">
 
-                        <label for="checkbox">Private Parking: </label>
-                        <input type="checkbox" name="checkbox" id="hotel">
+                            <label for="checkbox">Private Parking: </label>
+                            <input type="checkbox" name="checkbox" id="hotel">
 
-                        <select name="stars" id="stars">
-                            <option value="All">All</option <?php foreach($votes as $vote) { ?>>
-                            <option value="<?php echo $vote ?>"><?php echo $vote ?></option <?php } ?>>
-                        </select>
-                        <input type="submit" value="Search">
-                    </form>
-                </div>
-                <div class="col-lg-4 col-md-8 col-sm-12" <?php foreach($filteredHotels as $hotel) { ?>>
-                    <div class="card px-3 my-3">
-                        <div class="card-title">
-                            <h3 class="mb-2"><?php echo $hotel['name'] ?></h3>
-                        </div>
-                        <div class="card-body">
-                            <p class="mb-2">Description: <?php echo $hotel['description'] ?></p>
-                            <p class="mb-2">Vote: <?php echo $hotel['vote'] ?></p>
-                            <p class="mb-2">Distance to center: <?php echo $hotel['distance_to_center'] ?> km</p>
-                        </div>
-                    </div <?php } ?>>
+                            <select name="stars" id="stars">
+                                <option value="All">All</option <?php foreach($votes as $vote) { ?>>
+                                <option value="<?php echo $vote ?>"><?php echo $vote ?></option <?php } ?>>
+                            </select>
+                            <input type="submit" value="Search">
+                        </form>
+                    </div>
+                    <div class="col-lg-4 col-md-8 col-sm-12" <?php foreach($filteredHotels as $hotel) { ?>>
+                        <div class="card px-3 my-3">
+                            <div class="card-title">
+                                <h3 class="mb-2"><?php echo $hotel['name'] ?></h3>
+                            </div>
+                            <div class="card-body">
+                                <p class="mb-2">Description: <?php echo $hotel['description'] ?></p>
+                                <p class="mb-2">Vote: <?php echo $hotel['vote'] ?></p>
+                                <p class="mb-2">Distance to center: <?php echo $hotel['distance_to_center'] ?> km</p>
+                            </div>
+                        </div <?php } ?>>
+                    </div>
+            </div>
+            <div class="template" <?php else: ?>>
+                <div class="row justify-content-center align-items-center vh-100">
+                    <div class="col-lg-4 col-md-8 col-lg-12 text-center">
+                        <h3><?php echo $result ?></h3>
+                        <button class="btn btn-primary">Home</button>
+                    </div>
                 </div>
             </div>
+            <?php endif; ?>
         </div>
     </main>
 
