@@ -39,7 +39,14 @@
 
     ];
 
-    var_dump($hotels);
+    if (isset($_GET['checkbox'])) {
+        $filteredHotels = array_filter($hotels, function ($hotel) {
+            return $hotel['parking'] === true;
+        });
+    } else {
+        $filteredHotels = $hotels;
+    }
+    
 ?>
 
 <!DOCTYPE html>
@@ -60,6 +67,39 @@
 
 <body>
     
+    <header>
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                </div>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <form action="<?php echo $_SERVER['PHP_SELF'] ?>">
+                        <label for="checkbox">Private Parking: </label>
+                        <input type="checkbox" name="checkbox" id="hotel">
+                        <input type="submit" value="Search">
+                    </form>
+                </div>
+                <div class="col-lg-4 col-md-8 col-sm-12" <?php foreach($filteredHotels as $hotel) { ?>>
+                    <div class="card px-3 my-3">
+                        <div class="card-title">
+                            <h3 class="mb-2"><?php echo $hotel['name'] ?></h3>
+                        </div>
+                        <div class="card-body">
+                            <p class="mb-2">Description: <?php echo $hotel['description'] ?></p>
+                            <p class="mb-2">Vote: <?php echo $hotel['vote'] ?></p>
+                            <p class="mb-2">Distance to center: <?php echo $hotel['distance_to_center'] ?></p>
+                        </div>
+                    </div <?php } ?>>
+                </div>
+            </div>
+        </div>
+    </main>
 
     <script src="./js/main.js"></script>
 </body>
