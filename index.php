@@ -39,14 +39,38 @@
 
     ];
 
-    if (isset($_GET['checkbox'])) {
+    $votes = [1, 2, 3, 4, 5];
+
+    if (isset($_GET['checkbox']) && isset($_GET['stars'])) {
+        $filteredHotels = array_filter($hotels, function ($hotel) {
+            if ($_GET['stars'] === 'All') {
+                return $hotel['parking'] === true;
+            } else {
+                return $hotel['parking'] === true && $hotel['vote'] == $_GET['stars'];
+            }
+        });
+    } elseif (isset($_GET['checkbox'])) {
         $filteredHotels = array_filter($hotels, function ($hotel) {
             return $hotel['parking'] === true;
+        });
+    } elseif (isset($_GET['stars'])) {
+        $filteredHotels = array_filter($hotels, function ($hotel) {
+            if ($_GET['stars'] === 'All') {
+                return true;
+            } else {
+                return $hotel['vote'] == $_GET['stars'];
+            }
         });
     } else {
         $filteredHotels = $hotels;
     }
     
+    if (empty($filteredHotels)) {
+        $result = 'Nessun risultato corrispondente alla ricerca';
+        echo $result;
+    } else {
+        $result = $filteredHotels;
+    }
 ?>
 
 <!DOCTYPE html>
@@ -80,8 +104,14 @@
             <div class="row">
                 <div class="col-12">
                     <form action="<?php echo $_SERVER['PHP_SELF'] ?>">
+
                         <label for="checkbox">Private Parking: </label>
                         <input type="checkbox" name="checkbox" id="hotel">
+
+                        <select name="stars" id="stars">
+                            <option value="All">All</option <?php foreach($votes as $vote) { ?>>
+                            <option value="<?php echo $vote ?>"><?php echo $vote ?></option <?php } ?>>
+                        </select>
                         <input type="submit" value="Search">
                     </form>
                 </div>
@@ -93,7 +123,7 @@
                         <div class="card-body">
                             <p class="mb-2">Description: <?php echo $hotel['description'] ?></p>
                             <p class="mb-2">Vote: <?php echo $hotel['vote'] ?></p>
-                            <p class="mb-2">Distance to center: <?php echo $hotel['distance_to_center'] ?></p>
+                            <p class="mb-2">Distance to center: <?php echo $hotel['distance_to_center'] ?> km</p>
                         </div>
                     </div <?php } ?>>
                 </div>
